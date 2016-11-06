@@ -6,6 +6,8 @@
 
 #include "cros_gralloc.h"
 
+#include "drmhwcgralloc.h"
+
 #include <sys/mman.h>
 #include <xf86drm.h>
 
@@ -215,6 +217,7 @@ static int cros_gralloc_perform(struct gralloc_module_t const* module,
 	case GRALLOC_DRM_GET_FORMAT:
 	case GRALLOC_DRM_GET_DIMENSIONS:
 	case GRALLOC_DRM_GET_BACKING_STORE:
+	case static_cast<int>(GRALLOC_MODULE_PERFORM_GET_USAGE):
 		break;
 	default:
 		return CROS_GRALLOC_ERROR_UNSUPPORTED;
@@ -252,6 +255,16 @@ static int cros_gralloc_perform(struct gralloc_module_t const* module,
 	case GRALLOC_DRM_GET_BACKING_STORE:
 		out_store = va_arg(args, uint64_t *);
 		*out_store = drv_bo_get_plane_handle(bo->bo, 0).u64;
+		break;
+	case static_cast<int>(GRALLOC_MODULE_PERFORM_GET_USAGE):
+        {
+			int *buffer_usage = va_arg(args, int *);
+			if (hnd->usage & GRALLOC_USAGE_PROTECTED) {
+				*buffer_usage = 0;
+			} else {
+				*buffer_usage = hnd->usage;
+			}
+}
 		break;
 	default:
 		return CROS_GRALLOC_ERROR_UNSUPPORTED;
