@@ -47,11 +47,11 @@ LOCAL_SRC_FILES := \
 	cros_gralloc/cros_gralloc_helpers.cpp \
 	cros_gralloc/cros_gralloc_module.cpp
 
-LOCAL_CPPFLAGS += -std=c++11 -DDRV_I915
+LOCAL_CPPFLAGS += -std=c++11 -DDRV_I915 -D_FILE_OFFSET_BITS=64
 LOCAL_CFLAGS += -Wall -Wsign-compare -Wpointer-arith \
 		-Wcast-qual -Wcast-align \
 		-isystem external/drm_hwcomposer \
-		-DDRV_I915
+		-DDRV_I915 -D_FILE_OFFSET_BITS=64
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/include
 LOCAL_EXPORT_C_INCLUDE_DIRS := $(LOCAL_PATH)/include
